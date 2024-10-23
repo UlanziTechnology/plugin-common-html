@@ -1,7 +1,7 @@
 # ulanzideck-plugin-sdk-html
 
 <p align="start">
-   <strong>English</strong> | <a href="/common-html/README.zh.md">简体中文</a>
+   <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
 </p>
 
 ## Introduction
