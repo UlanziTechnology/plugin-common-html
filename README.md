@@ -34,7 +34,7 @@ libs   //This folder is the function of the plugin general library
 
 ### Some instructions and conventions
 
-1. The main service of the plugin library (for example app.html) will always be connected to the host computer. Implement the main functions of the plugin, receive changes to action's params, update the status of icons, etc.
+1. The main service of the plugin library (for example app.html) will always be connected to the UlanziDeck. Implement the main functions of the plugin, receive changes to action's params, update the status of icons, etc.
 
 2. The action of the plugin library (for example inspector.html). The page will be destroyed after toggling the UlanziDeck button, so it is not appropriate to do functional processing. It is mainly used to send params to UlanziDeck and synchronize params from UlanziDeck.
 
@@ -48,7 +48,7 @@ libs   //This folder is the function of the plugin general library
 
 7. In order to unify UI fonts, we have set up the open source font Source Han Sans in udpi.css, and we also need to reference the font library in app.html. Please use 'Source Han Sans' uniformly when drawing icons。
 
-8. The background color of UlanziDeck is '#282828', and the generic css (udpi.css) has been set to '--udpi-bgcolor: #282828; '。 If you want to customize the background color of the action, it should be the same as the background color of the host computer, so as to avoid the background color of the plug-in being too abrupt.
+8. The background color of UlanziDeck is '#282828', and the generic css (udpi.css) has been set to '--udpi-bgcolor: #282828; '。 If you want to customize the background color of the action, it should be the same as the background color of the UlanziDeck, so as to avoid the background color of the plug-in being too abrupt.
 
 
 ### How to use
@@ -256,6 +256,18 @@ Take the action's html page as an example to briefly demonstrate some methods. F
  * @param {local} boolean Optional | true if it is a local path
 */
 10. $UD.openUrl(url, local) 
+
+
+/**
+ * Request the UlanziDeck to display a pop-up window; After the pop-up window, test.html needs to actively close it, and test to window.close() to notify the pop-up window to close
+ *  @param {string} url Required | Local HTML path
+ * @param {string} width Optional | Window width, default 200
+ * @param {string} height Optional | Window height, default 200
+ * @param {string} x Optional | The x coordinate of the window. If no value is passed, it will be centered by default.
+ * @param {string} y Optional | The y coordinate of the window. If no value is passed, it will be centered by default.
+*/
+11. $UD.openView(url, width = 200, height = 200, x , y ) 
+
 
 
 

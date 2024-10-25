@@ -53,7 +53,7 @@ libs   //该文件夹就是插件通用库的功能
 ### 使用步骤
 
 ```bash
-通用库的具体使用和文件夹规范，可以查看 demo/com.ulanzi.analogclock.ulanziPlugin 的实现。
+SDK(html版本)的具体使用和文件夹规范，可以查看 demo/com.ulanzi.analogclock.ulanziPlugin 的实现。
 以下简单介绍通用库的使用：
 ```
 
@@ -73,7 +73,7 @@ libs   //该文件夹就是插件通用库的功能
 #### 1. 引入通用库
 ```html
 /**
- * ulanzideckApi 依赖 eventEmitter 和 utils ，需按以下顺序在html页面中引用
+ * ulanzideckApi.js 依赖 eventEmitter.js 和 utils.js ，需按以下顺序在html页面中引用
 */
 
 <script src="../../libs/js/constants.js"></script>
@@ -255,9 +255,14 @@ libs   //该文件夹就是插件通用库的功能
 
 /**
  * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
- *  @param {string} url 必传 | 本地html路径  (即将废弃， openUrl 方法已满足大多数打开链接的场景。若需要弹窗场景，我们后续会更新弹窗组件库，请关注)
+ *  @param {string} url 必传 | 本地html路径 
+ * @param {string} width 可选 | 窗口宽度，默认200
+ * @param {string} height 可选 | 窗口高度，默认200
+ * @param {string} x 可选 | 窗口x坐标，不传值默认居中
+ * @param {string} y 可选 | 窗口y坐标，不传值默认居中
 */
-11. $UD.openView(url, width = 200, height = 200, x = 100, y = 100) 
+11. $UD.openView(url, width = 200, height = 200, x , y ) 
+
 
 
 ```
