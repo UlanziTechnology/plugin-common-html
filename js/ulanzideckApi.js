@@ -20,12 +20,13 @@ class UlanziStreamDeck  {
 
 
   connect(uuid) {
-    Utils.log('[ULANZIDECK] WEBSOCKET CONNECT:',uuid)
+    Utils.log('[ULANZIDECK] CLIENT WEBSOCKET CONNECT:',uuid)
 
     this.port = Utils.getQueryParams('port') || 3906;
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
-    this.actionid = Utils.getQueryParams('actionid') || ''; 
+    this.actionid = Utils.getQueryParams('actionId') || ''; 
     this.key = Utils.getQueryParams('key') || ''; 
+    this.language = Utils.getQueryParams('language') || 'en';
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -39,10 +40,12 @@ class UlanziStreamDeck  {
     this.websocket = new WebSocket(`ws://${this.address}:${this.port}`);
 
     this.websocket.onopen = () => {
-      Utils.log('[ULANZIDECK] WEBSOCKET OPEN:', uuid);
+      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET OPEN:', uuid);
       const json = {
         code: 0,
         cmd: Events.CONNECTED,
+        actionid:this.actionid,
+        key:this.key,
         uuid
       };
 
@@ -57,23 +60,23 @@ class UlanziStreamDeck  {
     };
 
     this.websocket.onerror = (evt) => {
-      const error = `[ULANZIDECK] WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
+      const error = `[ULANZIDECK] CLIENT WEBSOCKET ERROR: ${evt}, ${evt.data}, ${SocketErrors['DEFAULT']}`;
       Utils.warn(error);
       this.emit(Events.ERROR, error);
     };
 
     this.websocket.onclose = (evt) => {
-      Utils.warn('[ULANZIDECK] WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
+      Utils.warn('[ULANZIDECK] CLIENT WEBSOCKET CLOSED:', SocketErrors['DEFAULT']);
       this.emit(Events.CLOSE);
     };
 
     this.websocket.onmessage = (evt) => {
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE ');
+      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE ');
 
       const data = evt && evt.data ? JSON.parse(evt.data) : null;
 
 
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE DATA:', JSON.stringify(data));
+      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE DATA:', JSON.stringify(data));
 
 
       //没有数据或者有data.code属性,且cmdType不等于REQUEST，则返回
@@ -81,7 +84,7 @@ class UlanziStreamDeck  {
 
 
 
-      Utils.log('[ULANZIDECK] WEBSOCKET MESSGE IN');
+      Utils.log('[ULANZIDECK] CLIENT WEBSOCKET MESSGE IN');
 
       //没有key时，保存key
       if (!this.key && data.uuid == this.uuid && data.key) {
@@ -127,7 +130,7 @@ class UlanziStreamDeck  {
     const el = document.querySelector('.udpi-wrapper');
     if (!el) return Utils.warn("No element found to localize");
 
-    this.language = Utils.getLanguage() || 'en';
+    // this.language = Utils.getLanguage() || 'en';
     if (!this.localization) {
       try {
         const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
@@ -159,6 +162,10 @@ class UlanziStreamDeck  {
       }
     });
   };
+
+  t(key){
+    return this.localization && this.localization[key] || key
+  }
 
   /**
    * 创建唯一值
@@ -221,27 +228,18 @@ class UlanziStreamDeck  {
     })
   }
 
-   /**
+  /**
    * 请求上位机机显⽰弹窗；弹窗后，test.html需要主动关闭，测试到window.close()可以通知弹窗关闭
-   *  @param {string} url 必传 | 本地html路径 
-   * @param {string} width 可选 | 窗口宽度，默认200
-   * @param {string} height 可选 | 窗口高度，默认200
-   * @param {string} x 可选 | 窗口x坐标，不传值默认居中
-   * @param {string} y 可选 | 窗口y坐标，不传值默认居中
+   *  @param {string} url 必传 | 本地html路径  (即将废弃， openUrl 方法已满足大多数打开链接的场景。若需要弹窗场景，我们后续会更新组件库，请关注)
   */
-   openView(url, width = 200, height = 200, x, y) {
-    const params = {
+  openView(url, width = 200, height = 200, x = 100, y = 100) {
+    this.send(Events.OPENVIEW, {
       url,
       width,
-      height
-    }
-    if(x){
-      params.x = x
-    }
-    if(y){
-      params.y = y
-    }
-    this.send(Events.OPENVIEW, params)
+      height,
+      x,
+      y
+    })
   }
 
   /**
