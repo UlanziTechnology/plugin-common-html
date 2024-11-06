@@ -26,7 +26,8 @@ class UlanziStreamDeck  {
     this.address = Utils.getQueryParams('address') || '127.0.0.1';
     this.actionid = Utils.getQueryParams('actionId') || ''; 
     this.key = Utils.getQueryParams('key') || ''; 
-    this.language = Utils.getQueryParams('language') || 'en';
+    this.language = Utils.getQueryParams('language') || Utils.getLanguage() || 'en';
+    this.language = Utils.adaptLanguage(this.language) ; 
     this.uuid = uuid;
 
     if (this.websocket) {
@@ -144,21 +145,24 @@ class UlanziStreamDeck  {
 
     const selectorsList = '[data-localize]';
     el.querySelectorAll(selectorsList).forEach(e => {
+
       const s = e.innerText.trim();
+      let dl = e.dataset.localize;
+      
       if(s){
-        e.innerText = this.localization[s] || e.innerText;
+        e.innerText = this.localization[dl ? dl : s] || e.innerText;
       }
       if (e.placeholder && e.placeholder.length) {
-        e.placeholder = this.localization[e.placeholder] || e.placeholder;
+        e.placeholder = this.localization[ dl ? dl : e.placeholder] || e.placeholder;
       }
       if (e.title && e.title.length) {
-        e.title = this.localization[e.title] || e.title;
+        e.title = this.localization[dl ? dl : e.title] || e.title;
       }
       if(e.label){
-          e.label = this.localization[e.label] || e.label;
+          e.label = this.localization[dl ? dl : e.label] || e.label;
       }
       if(e.textContent){
-          e.textContent = this.localization[e.textContent] || e.textContent;
+          e.textContent = this.localization[dl ? dl : e.textContent] || e.textContent;
       }
     });
   };

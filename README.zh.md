@@ -98,14 +98,16 @@ SDK(html版本)的具体使用和文件夹规范，可以查看 demo/com.ulanzi.
 
   <!-- 配置项的label和value用div.udpi-item包裹，label用udpi-item-label表示，value用udpi-item-value表示 -->
   <div class="udpi-item">
-    <!-- data-localize 表示需要本地化，编写页面默认使用英文，在根目录下配置对应的json，例如zh.json-->
+    <!-- data-localize 第一种方式，表示需要本地化，编写页面默认使用英文，sdk根据内容翻译。在根目录下配置对应的json，例如zh_CN.json-->
     <div class="udpi-item-label" data-localize>Name</div>
     <input type="text" class="udpi-item-value" name="name" value="test">
   </div>
   <div class="udpi-item">
     <div class="udpi-item-label" data-localize>Face</div>
     <select class="udpi-item-value select clockSelector" name="clock_index" >
-      <option label="Blue" value="blue" data-localize></option>
+      
+      <!-- data-localize 第二种方式，data-localize赋予值之后，sdk将根据值来获取翻译内容 -->
+      <option label="Blue" value="blue" data-localize="Blue"></option>
       <option label="Green" value="green" data-localize></option>
     </select>
   </div>

@@ -101,14 +101,16 @@ An action function may be configured on multiple keys, so the ulanzideck-plugin-
 
   <!-- The label and value of the configuration item are wrapped with div.udpi-item, the label uses the udpi-item-label class name, and the value uses the udpi-item-value class name. -->
   <div class="udpi-item">
-    <!-- data-localize means localization is required. By default, the page is written in English. Configure the corresponding json in the root directory, such as zh.json. -->
+    
+    <!-- data-localize. The first method indicates that localization is required. The writing page uses English by default, and the SDK translates it according to the content. Configure the corresponding json in the root directory, such as zh_CN.json -->
     <div class="udpi-item-label" data-localize>Name</div>
     <input type="text" class="udpi-item-value" name="name" value="test">
   </div>
   <div class="udpi-item">
     <div class="udpi-item-label" data-localize>Face</div>
     <select class="udpi-item-value select clockSelector" name="clock_index" >
-      <option label="Blue" value="blue" data-localize></option>
+      <!-- data-localize. In the second way, after data-localize assigns a value, the sdk will obtain the translation content based on the value. -->
+      <option label="Blue" value="blue" data-localize="Blue"></option>
       <option label="Green" value="green" data-localize></option>
     </select>
   </div>
