@@ -152,21 +152,28 @@ class UlanziStreamDeck  {
       const s = e.innerText.trim();
       let dl = e.dataset.localize;
       
-      if(s){
-        e.innerText = this.localization[dl ? dl : s] || e.innerText;
-      }
       if (e.placeholder && e.placeholder.length) {
+        // console.log('e.placeholder:',e.placeholder)
         e.placeholder = this.localization[ dl ? dl : e.placeholder] || e.placeholder;
       }
       if (e.title && e.title.length) {
+        // console.log('e.title:',e.title)
         e.title = this.localization[dl ? dl : e.title] || e.title;
       }
       if(e.label){
+        // console.log('e.label:',e.label)
           e.label = this.localization[dl ? dl : e.label] || e.label;
       }
       if(e.textContent){
+        // console.log('e.textContent:',e.textContent)
           e.textContent = this.localization[dl ? dl : e.textContent] || e.textContent;
       }
+      
+      if(s){
+        // console.log('s:',s)
+        e.innerHTML = this.localization[dl ? dl : s] || e.innerHTML;
+      }
+
     });
   };
 
