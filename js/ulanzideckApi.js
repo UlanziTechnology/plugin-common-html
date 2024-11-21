@@ -136,11 +136,16 @@ class UlanziStreamDeck  {
 
     // this.language = Utils.getLanguage() || 'en';
     if (!this.localization) {
+      // url的path一般是 /plugins/com.ulanzi.*.ulanziPlugin/*/..*/*.html
+      // 减掉 插件目录层级到根目录的层级查2，和本身，即相对插件目录层级的差
+      const pathAry = window.location.pathname.substring(1).split('/')
+      const prefix = Array(pathAry.length - 2 - 1).fill('../').join('')
+
       try {
-        const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
+        const localJson = await Utils.readJson(`${prefix}${this.language}.json`)
         this.localization = localJson['Localization'] ? localJson['Localization'] : null
       } catch (e) {
-        Utils.log(`${this.localPathPrefix}${this.language}.json`)
+        Utils.log(`${prefix}${this.language}.json`)
         Utils.warn("No FILE found to localize " + this.language);
       }
     }
