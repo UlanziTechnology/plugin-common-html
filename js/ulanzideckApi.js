@@ -11,7 +11,6 @@ class UlanziStreamDeck  {
     this.websocket = null;
     this.language = 'en';
     this.localization = null;
-    this.localPathPrefix = '../../';
     this.on = EventEmitter.on;
     this.emit = EventEmitter.emit;
     this.isMain = false;
@@ -137,10 +136,10 @@ class UlanziStreamDeck  {
     // this.language = Utils.getLanguage() || 'en';
     if (!this.localization) {
       try {
-        const localJson = await Utils.readJson(`${this.localPathPrefix}${this.language}.json`)
+        const localJson = await Utils.readJson(`${Utils.getPluginPath()}/${this.language}.json`)
         this.localization = localJson['Localization'] ? localJson['Localization'] : null
       } catch (e) {
-        Utils.log(`${this.localPathPrefix}${this.language}.json`)
+        Utils.log(`${Utils.getPluginPath()}/${this.language}.json`)
         Utils.warn("No FILE found to localize " + this.language);
       }
     }
