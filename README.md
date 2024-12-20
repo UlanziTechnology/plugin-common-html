@@ -46,7 +46,7 @@ libs   //This folder is the function of the plugin general library
 
 6. The localization file is placed in the plugin root directory, which is at the same level as the ulanzideck-plugin-sdk libs. (For the writing rules of localized json files, you can view the demo example) Example: zh_CN.json en.json。
 
-7. In order to unify UI fonts, we have set up the open source font Source Han Sans in udpi.css, and we also need to reference the font library in app.html. Please use 'Source Han Sans' uniformly when drawing icons。
+7. In order to unify UI fonts, we have set up the open source font Source Han Sans SC in udpi.css, and we also need to reference the font library in app.html. Please use 'Source Han Sans SC' uniformly when drawing icons。
 
 8. The background color of UlanziDeck is '#282828', and the generic css (udpi.css) has been set to '--udpi-bgcolor: #282828; '。 If you want to customize the background color of the action, it should be the same as the background color of the UlanziDeck, so as to avoid the background color of the plug-in being too abrupt.
 
