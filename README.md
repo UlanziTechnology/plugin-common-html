@@ -44,7 +44,7 @@ libs   //This folder is the function of the plugin general library
 
 5. The uuid of the action connection must be greater than 4 for differentiation. Example: com.ulanzi.ulanzideck.pluginname.pluginaction
 
-6. The localization file is placed in the plugin root directory, which is at the same level as the ulanzideck-plugin-sdk libs. (For the writing rules of localized json files, you can view the demo example) Example: zh_CN.json en.json。
+6. The localization file is placed in the plugin root directory, which is at the same level as the ulanzideck-plugin-sdk libs. (For the writing rules of localized json files, you can view the demo example) Example: zh_CN.json en.json ja_JP.json de_DE.json zh_HK.json
 
 7. In order to unify UI fonts, we have set up the open source font Source Han Sans SC in udpi.css, and we also need to reference the font library in app.html. Please use 'Source Han Sans SC' uniformly when drawing icons。
 

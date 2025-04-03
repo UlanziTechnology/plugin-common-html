@@ -44,11 +44,12 @@ libs   //该文件夹就是插件通用库的功能
 
 5. 配置项连接的uuid要大于4用于区分。例：com.ulanzi.ulanzideck.插件名.插件action
 
-6. 本地化文件放在插件根目录下，即与libs插件通用库同级。（本地化json文件的编写规则，可以查看demo示例）例：zh_CN.json en.json
+6. 本地化文件放在插件根目录下，即与libs插件通用库同级。（本地化json文件的编写规则，可以查看demo示例）例：zh_CN.json en.json ja_JP.json de_DE.json zh_HK.json
 
 7. 为了UI字体的统一，我们已经在udpi.css引用了上位机内置的开源字体思源黑体（Source Han Sans SC），在app.html也同样需要引用字体库。请大家在绘制icon时，统一使用'Source Han Sans SC'。
 
 8. 上位机的背景颜色为 '#282828'，通用css（udpi.css）已经设定了'--udpi-bgcolor: #282828;'。若要自定义action的背景颜色应与上位机背景色相同，避免插件背景颜色过于突兀。
+
 
 ### 使用步骤
 
