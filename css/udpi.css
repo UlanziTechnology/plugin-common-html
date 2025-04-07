@@ -328,8 +328,8 @@ ol {
   -webkit-margin-before: 0px;
   -webkit-margin-after: 4px;
   -webkit-padding-start: 1em;
-  max-height: 90px;
-  overflow-y: scroll;
+  /* max-height: 90px; */
+  overflow-y: auto;
   cursor: pointer;
   user-select: none;
 }
@@ -1626,6 +1626,14 @@ input[type="range"].colortemperature::-webkit-slider-thumb {
   opacity: 1;
   transition: opacity 0.25s ease-out;
 }
+
+.udpi-item-value a {
+  color: steelblue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
 form{
   position: relative;
 }
