@@ -27,7 +27,7 @@ class UlanziStreamDeck  {
     this.key = Utils.getQueryParams('key') || ''; 
     this.language = Utils.getQueryParams('language') || Utils.getLanguage() || 'en';
     this.language = Utils.adaptLanguage(this.language) ; 
-    this.uuid = uuid;
+    this.uuid = uuid || Utils.getQueryParams('uuid') || '';
 
     if (this.websocket) {
       this.websocket.close();
