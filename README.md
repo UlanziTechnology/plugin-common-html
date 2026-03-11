@@ -1,4 +1,4 @@
-# ulanzideck-plugin-sdk-html
+# ulanzistudio-plugin-sdk-html
 
 <p align="start">
    <strong>English</strong> | <a href="./README.zh.md">简体中文</a>
@@ -6,9 +6,11 @@
 
 ## Introduction
 
-The ulanzideck-plugin-sdk encapsulates the WebSocket connection with the UlanziDeck and its related communication events. This simplifies the development process and enables developers to communicate with the UlanziDeck through simple event calls, allowing them to focus more on the development of plugin functions.
+The ulanzistudio-plugin-sdk encapsulates the WebSocket connection with the UlanziStudio and its related communication events. This simplifies the development process and enables developers to communicate with the UlanziStudio through simple event calls, allowing them to focus more on the development of plugin functions.
 
 > Current version is developed according to the **Ulanzi JS Plugin Development Protocol - V2.1.2**.
+
+For `manifest.json` configuration reference, see **[manifest.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.md)**.
 
 ---
 
@@ -23,7 +25,7 @@ libs/
 │   ├── eventEmitter.js   // Lightweight pub/sub event emitter with wildcard support
 │   ├── timers.js         // Replaces window.setTimeout/setInterval with Web Worker-based versions to avoid UI thread blocking
 │   ├── utils.js          // Helper utilities: form data, canvas/image drawing, HTTP requests, localization, etc.
-│   └── ulanzideckApi.js  // Main SDK class. Encapsulates all UlanziDeck events, WebSocket connection, and localization.
+│   └── ulanziApi.js  // Main SDK class. Encapsulates all UlanziStudio events, WebSocket connection, and localization.
 └── assets/
     └── *.svg             // Icons required by uspi.css. Do not modify.
 ```
@@ -32,24 +34,24 @@ libs/
 
 ## Instructions & Conventions
 
-1. **Main service** (`app.html`) stays connected to the UlanziDeck at all times. It implements the plugin's core logic, receives param changes from actions, and updates icon states.
+1. **Main service** (`app.html`) stays connected to the UlanziStudio at all times. It implements the plugin's core logic, receives param changes from actions, and updates icon states.
 
 2. **Action / PropertyInspector** (`inspector.html`) is destroyed when the user switches buttons. Keep it lightweight — only use it to send/receive configuration params.
 
 3. Plugin package naming: `com.ulanzi.{pluginName}.ulanziPlugin`
 
 4. The **main service UUID** must have exactly **4** dot-separated segments:
-   `com.ulanzi.ulanzideck.{pluginName}`
+   `com.ulanzi.ulanzistudio.{pluginName}`
 
 5. An **action UUID** must have **more than 4** segments to be distinguished from the main service:
-   `com.ulanzi.ulanzideck.{pluginName}.{actionName}`
+   `com.ulanzi.ulanzistudio.{pluginName}.{actionName}`
 
 6. Localization JSON files go in the **plugin root directory** (same level as `libs/`). Supported file names:
    `zh_CN.json` `zh_HK.json` `en.json` `ja_JP.json` `de_DE.json` `ko_KR.json` `pt_PT.json` `es_ES.json`
 
 7. The built-in font **Source Han Sans SC** is referenced in `uspi.css`. Reference the same font in `app.html` when drawing icons on canvas.
 
-8. The UlanziDeck background color is `#282828` (set as `--uspi-bgcolor` in `uspi.css`). Match this color when customizing action backgrounds.
+8. The UlanziStudio background color is `#1e1f22` (set as `--uspi-bodybg` in `uspi.css`). Match this color when customizing action backgrounds.
 
 9. The `controller` URL parameter indicates device type: `Keypad` (button) or `Encoder` (dial). Read it via `$UD.controller` after connecting.
 
@@ -77,7 +79,7 @@ The files must be included **in the following order**:
 <script src="../../libs/js/eventEmitter.js"></script>
 <script src="../../libs/js/timers.js"></script>
 <script src="../../libs/js/utils.js"></script>
-<script src="../../libs/js/ulanzideckApi.js"></script>
+<script src="../../libs/js/ulanziApi.js"></script>
 ```
 
 After loading, the global `$UD` instance and `Utils` instance are available.
@@ -117,11 +119,11 @@ Use `Utils.getFormValue(form)` to read form data and `Utils.setFormValue(jsn, fo
 
 ---
 
-### 3. Connect to UlanziDeck
+### 3. Connect to UlanziStudio
 
 ```js
 // Connect — reads port, address, uuid, key, language, controller, device from URL params
-$UD.connect('com.ulanzi.ulanzideck.myplugin.myaction');
+$UD.connect('com.ulanzi.ulanzistudio.myplugin.myaction');
 
 $UD.onConnected(conn => {
   // WebSocket is open; render dynamic UI here
@@ -166,7 +168,7 @@ const label = $UD.t('Name'); // returns translated string, or the key itself if 
 
 ---
 
-## Receive Events (UlanziDeck → Plugin)
+## Receive Events (UlanziStudio → Plugin)
 
 ### Connection Events
 
@@ -249,7 +251,7 @@ $UD.onSelectdialog(message => {})
 
 ---
 
-## Send Events (Plugin → UlanziDeck)
+## Send Events (Plugin → UlanziStudio)
 
 ### Set Button Icon
 
@@ -355,7 +357,7 @@ $UD.getGlobalSettings(context)
 
 ```js
 /**
- * Show a toast notification on the UlanziDeck host application
+ * Show a toast notification on the UlanziStudio host application
  * @param {string} msg  Required
  */
 $UD.toast(msg)
@@ -567,14 +569,15 @@ Utils.getProperty(obj, dotSeparatedKeys, defaultValue)
 Launch the host application with the following flags to enable debugging.
 
 **Available flags:**
+
 | Flag | Description |
 |------|-------------|
 | `--log` | Write logs to file |
-| `--console` | Enable console output |
 | `--logLevel` | Set log verbosity |
-| `--webRemoteDebug` | Enable WebView remote debug (port 9292 by default) |
-| `--webRemotePort` | Override WebView debug port |
-| `--nodeRemoteDebug` | Enable Node.js inspector (127.0.0.1:9229) |
+| `--pluginLoad` | Enable plugin load hook |
+| `--webRemoteDebug` | Enable WebView remote debugging for HTML plugins. Default port 9292 — open `localhost:9292` in the browser to debug all loaded HTML plugins |
+| `--webRemotePort=<port>` | Override WebView debug port, e.g. `--webRemotePort=9292` |
+| `--nodeRemoteDebug` | Enable remote debugging for Node.js plugins. Requires `"Inspect": "--inspect=[host:port]"` in the plugin's `manifest.json`. Default address `127.0.0.1:9229`. Open `chrome://inspect` in Chrome; for non-default ports, add the port under Discover network targets |
 | `--doubleClick` | Enable double-click detection |
 
 **Windows:**
@@ -584,19 +587,9 @@ Right-click the Ulanzi Studio shortcut → Properties → append flags to the en
 "C:\...\Ulanzi Studio.exe" --log --webRemoteDebug
 ```
 
-**macOS (with Terminal):**
-```bash
-cd /Applications/Ulanzi\ Studio.app/Contents/MacOS
-open UlanziDeck --args --log
-# or run directly (required for some permissions):
-./UlanziDeck --log
-```
-
-> Note: the `open` command may prevent the app from obtaining Accessibility permissions, which can disable hotkey functionality. Use `./UlanziDeck` directly if hotkeys are not working.
-
-**macOS (without Terminal):**
+**macOS:**
 ```bash
 open /Applications/Ulanzi\ Studio.app --args --log --webRemoteDebug
 ```
 
-Access WebView debugging via `chrome://inspect` in Chrome.
+> Note: the `open` command may prevent the app from obtaining Accessibility permissions, which can disable hotkey functionality. Use `./UlanziStudio` directly if hotkeys are not working.

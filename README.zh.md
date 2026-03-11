@@ -1,4 +1,4 @@
-# ulanzideck-plugin-sdk html版本
+# ulanzistudio-plugin-sdk html版本
 
 <p align="start">
    <a href="./README.md">English</a> | <strong>简体中文</strong>
@@ -9,6 +9,8 @@
 我们依据插件开发协议，封装了与上位机的 WebSocket 连接及相关的通信事件。这样简化了开发流程，使开发者仅需通过简单的事件调用即可实现与上位机的通信，从而能更专注于插件功能的开发。
 
 > 当前版本根据 **Ulanzi JS 插件开发协议 - V2.1.2** 编写。
+
+`manifest.json` 配置字段详细说明，请参阅 **[manifest.zh.md](https://github.com/UlanziTechnology/UlanziDeckPlugin-SDK/blob/main/manifest.zh.md)**。
 
 ---
 
@@ -23,7 +25,7 @@ libs/
 │   ├── eventEmitter.js   // 轻量级发布/订阅事件系统，支持通配符
 │   ├── timers.js         // 用 Web Worker 替换 window.setTimeout/setInterval，避免阻塞 UI 线程
 │   ├── utils.js          // 工具方法：表单数据、Canvas/图片绘制、HTTP 请求、本地化等
-│   └── ulanzideckApi.js  // SDK 主类，封装了所有上位机事件、WebSocket 连接与本地化处理
+│   └── ulanziApi.js  // SDK 主类，封装了所有上位机事件、WebSocket 连接与本地化处理
 └── assets/
     └── *.svg             // uspi.css 所需的图标资源，无需修改
 ```
@@ -39,17 +41,17 @@ libs/
 3. 插件包命名规范：`com.ulanzi.{插件名}.ulanziPlugin`
 
 4. **主服务 UUID** 必须由恰好 **4** 个点分隔段组成：
-   `com.ulanzi.ulanzideck.{插件名}`
+   `com.ulanzi.ulanzistudio.{插件名}`
 
 5. **action UUID** 必须超过 4 段，以便与主服务区分：
-   `com.ulanzi.ulanzideck.{插件名}.{actionName}`
+   `com.ulanzi.ulanzistudio.{插件名}.{actionName}`
 
 6. 本地化 JSON 文件放在**插件根目录**（与 `libs/` 同级）。支持的文件名：
    `zh_CN.json` `zh_HK.json` `en.json` `ja_JP.json` `de_DE.json` `ko_KR.json` `pt_PT.json` `es_ES.json`
 
 7. `uspi.css` 中已引用上位机内置的开源字体**思源黑体（Source Han Sans SC）**。在 `app.html` 中使用 Canvas 绘制 icon 时，请统一使用 `'Source Han Sans SC'`。
 
-8. 上位机背景颜色为 `#282828`（已在 `uspi.css` 中设为 `--uspi-bgcolor`）。若自定义 action 背景色，建议与此保持一致，避免视觉突兀。
+8. 上位机背景颜色为 `#1e1f22`（已在 `uspi.css` 中设为 `--uspi-bodybg`）。若自定义 action 背景色，建议与此保持一致，避免视觉突兀。
 
 9. `controller` URL 参数表示设备类型：`Keypad`（普通按键）或 `Encoder`（旋钮）。连接后可通过 `$UD.controller` 读取。
 
@@ -77,7 +79,7 @@ libs/
 <script src="../../libs/js/eventEmitter.js"></script>
 <script src="../../libs/js/timers.js"></script>
 <script src="../../libs/js/utils.js"></script>
-<script src="../../libs/js/ulanzideckApi.js"></script>
+<script src="../../libs/js/ulanziApi.js"></script>
 ```
 
 加载完成后，全局变量 `$UD` 和 `Utils` 即可使用。
@@ -121,7 +123,7 @@ libs/
 
 ```js
 // 连接上位机，连接参数（port、address、uuid、key、language、controller、device）从 URL 参数中自动读取
-$UD.connect('com.ulanzi.ulanzideck.myplugin.myaction');
+$UD.connect('com.ulanzi.ulanzistudio.myplugin.myaction');
 
 $UD.onConnected(conn => {
   // WebSocket 已连接，可在此处渲染动态 UI
@@ -571,11 +573,11 @@ Utils.getProperty(obj, dotSeparatedKeys, defaultValue)
 | 参数 | 说明 |
 |------|------|
 | `--log` | 将日志写入文件 |
-| `--console` | 启用控制台输出 |
 | `--logLevel` | 设置日志级别 |
-| `--webRemoteDebug` | 启用 WebView 远程调试（默认端口 9292） |
-| `--webRemotePort` | 自定义 WebView 调试端口 |
-| `--nodeRemoteDebug` | 启用 Node.js Inspector（127.0.0.1:9229） |
+| `--pluginLoad` | 开启插件加载钩子 |
+| `--webRemoteDebug` | 启用 HTML 插件的 WebView 远程调试，默认端口 9292，通过浏览器打开 `localhost:9292` 进行调试，可调试所有已加载的 HTML 插件 |
+| `--webRemotePort=<端口>` | 自定义 WebView 调试端口，例：`--webRemotePort=9292` |
+| `--nodeRemoteDebug` | 启用 Node.js 插件远程调试，需在插件 `manifest.json` 中配置 `"Inspect": "--inspect=[host:port]"`，默认地址 `127.0.0.1:9229`；在 Chrome 中打开 `chrome://inspect`，非默认端口时需在 Discover network targets 中手动添加对应端口 |
 | `--doubleClick` | 启用双击检测 |
 
 **Windows：**
@@ -585,19 +587,9 @@ Utils.getProperty(obj, dotSeparatedKeys, defaultValue)
 "C:\...\Ulanzi Studio.exe" --log --webRemoteDebug
 ```
 
-**macOS（通过终端）：**
+**macOS：**
 ```bash
-cd /Applications/Ulanzi\ Studio.app/Contents/MacOS
-open UlanziDeck --args --log
-# 或直接运行可执行文件（某些权限场景下需要）：
-./UlanziDeck --log
+open /Applications/Ulanzi\ Studio.app --args --log ---webRemoteDebug 
 ```
 
-> 注意：使用 `open` 命令启动时，应用可能无法获得系统辅助功能权限，会导致快捷键功能失效。若遇此问题，请改用 `./UlanziDeck` 直接启动。
-
-**macOS（无需终端）：**
-```bash
-open /Applications/Ulanzi\ Studio.app --args --log --webRemoteDebug
-```
-
-在 Chrome 中通过 `chrome://inspect` 访问 WebView 调试界面。
+> 注意：使用 `open` 命令启动时，应用可能无法获得系统辅助功能权限，会导致快捷键功能失效。若遇此问题，请改用 `./UlanziStudio` 直接启动。
