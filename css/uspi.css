@@ -110,6 +110,11 @@ input.uspi-item-value{
   border: 1px solid var(--uspi-inputbg);
   border-radius: var(--uspi-borderradius);
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
 textarea.uspi-item-value {
   resize: none;
   height: 68px;
@@ -212,9 +217,10 @@ button.primary{
   color: var(--uspi-bodybg);
 }
 button.uspi-item-value{
-  display: inline-block;
-  margin-left: 108px;
-  width: 124px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
 }
 
 button.default{
@@ -305,6 +311,44 @@ details{
   100% {
     transform: rotate(360deg);
   }
+}
+
+.uspi-select-row {
+  gap: 6px;
+}
+
+.uspi-select-row select {
+  flex: 1;
+  min-width: 0;
+  padding: 0 6px;
+  color: var(--uspi-textcolor);
+  height: var(--uspi-height);
+  background-color: var(--uspi-inputbg);
+  border: 1px solid var(--uspi-inputbg);
+  border-radius: var(--uspi-borderradius);
+  line-height: var(--uspi-height);
+}
+
+.uspi-refresh-btn {
+  flex: 0 0 var(--uspi-height);
+  width: var(--uspi-height);
+  height: var(--uspi-height);
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--uspi-inputbg);
+  border-radius: var(--uspi-borderradius);
+  background-color: var(--uspi-inputbg);
+  background-image: url(../assets/u_refresh.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 150ms ease;
+}
+
+.uspi-refresh-btn:hover {
+  opacity: 1;
 }
 
 .hidden{
