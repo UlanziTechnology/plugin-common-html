@@ -150,20 +150,54 @@ document.querySelector('#property-inspector').addEventListener('change', () => {
 
 ### 4. Localization JSON Format
 
+Localization JSON files can include two kinds of entries:
+
+- Top-level manifest fields: use `Name`, `Description`, and an `Actions` array aligned by index with `manifest.json` to localize how the plugin and its actions appear in UlanziStudio.
+- Custom UI strings: use the `Localization` object for Property Inspector or page text, where each key matches the text or attribute value referenced by `data-localize`.
+
+**zh_CN.json:**
+
 ```json
 {
+  "Name": "我的插件",
+  "Description": "我的插件描述",
+  "Actions": [
+    {
+      "Name": "插件操作",
+      "Tooltip": "执行插件操作"
+    }
+  ],
   "Localization": {
-    "Name": "名称",
-    "Color": "颜色",
-    "Blue": "蓝色",
-    "Green": "绿色"
+    "Message": "消息",
+    "Save": "保存",
+    "Hello": "你好"
+  }
+}
+```
+
+**en.json:**
+
+```json
+{
+  "Name": "My Plugin",
+  "Description": "My plugin description",
+  "Actions": [
+    {
+      "Name": "Plugin Action",
+      "Tooltip": "Run plugin action"
+    }
+  ],
+  "Localization": {
+    "Message": "Message",
+    "Save": "Save",
+    "Hello": "Hello"
   }
 }
 ```
 
 You can also translate strings manually in JavaScript:
 ```js
-const label = $UD.t('Name'); // returns translated string, or the key itself if not found
+const label = $UD.t('Message'); // returns translated string, or the key itself if not found
 ```
 
 ---

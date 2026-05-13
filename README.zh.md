@@ -150,20 +150,54 @@ document.querySelector('#property-inspector').addEventListener('change', () => {
 
 ### 4. 本地化 JSON 格式
 
+本地化 JSON 文件可以包含两类内容：
+
+- 顶层 manifest 字段：使用 `Name`、`Description`，以及与 `manifest.json` 中 action 顺序一致的 `Actions` 数组，用于本地化插件和 action 在上位机中的显示名称与提示文案。
+- 自定义 UI 文案：使用 `Localization` 对象存放配置项页面或普通页面文案，其中每个 key 需要与 `data-localize` 引用的文本或属性值一致。
+
+**zh_CN.json：**
+
 ```json
 {
+  "Name": "我的插件",
+  "Description": "我的插件描述",
+  "Actions": [
+    {
+      "Name": "插件操作",
+      "Tooltip": "执行插件操作"
+    }
+  ],
   "Localization": {
-    "Name": "名称",
-    "Color": "颜色",
-    "Blue": "蓝色",
-    "Green": "绿色"
+    "Message": "消息",
+    "Save": "保存",
+    "Hello": "你好"
+  }
+}
+```
+
+**en.json：**
+
+```json
+{
+  "Name": "My Plugin",
+  "Description": "My plugin description",
+  "Actions": [
+    {
+      "Name": "Plugin Action",
+      "Tooltip": "Run plugin action"
+    }
+  ],
+  "Localization": {
+    "Message": "Message",
+    "Save": "Save",
+    "Hello": "Hello"
   }
 }
 ```
 
 也可在 JavaScript 中手动调用翻译：
 ```js
-const label = $UD.t('Name'); // 返回翻译后的字符串，找不到时返回 key 本身
+const label = $UD.t('Message'); // 返回翻译后的字符串，找不到时返回 key 本身
 ```
 
 ---
