@@ -518,8 +518,11 @@ class UlanziUtils {
 		const pathArr = currentFilePath.split(split_tag);
 		const idx = pathArr.findIndex(f => f.endsWith('ulanziPlugin'));
 		const __folderpath = `${pathArr.slice(0, idx + 1).join("/")}`;
-	
-		return __folderpath;
+
+		// Chromium exposes Windows file URLs as /C:/path/to/file. Remove only
+		// that leading slash so filesystem consumers receive a valid C:/ path,
+		// while preserving Unix/macOS absolute paths such as /Users/....
+		return /^\/[A-Za-z]:\//.test(__folderpath) ? __folderpath.slice(1) : __folderpath;
 	
 	}
 
